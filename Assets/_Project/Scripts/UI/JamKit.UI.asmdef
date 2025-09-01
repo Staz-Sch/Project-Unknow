@@ -1,0 +1,17 @@
+{
+    "name": "JamKit.UI",
+    "rootNamespace": "",
+    "references": [
+        "GUID:60490e1ba0e1de94ba58c510e74d02a4",
+        "GUID:9bed68040b05a1446b9cdd6aa74ebae9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

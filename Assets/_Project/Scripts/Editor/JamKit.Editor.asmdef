@@ -1,0 +1,21 @@
+{
+    "name": "JamKit.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:60490e1ba0e1de94ba58c510e74d02a4",
+        "GUID:9bed68040b05a1446b9cdd6aa74ebae9",
+        "GUID:b2cb49180fceab54b8612c0430d9d8ff",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
