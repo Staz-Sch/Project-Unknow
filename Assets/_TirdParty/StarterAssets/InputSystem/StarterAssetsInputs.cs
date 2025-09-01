@@ -12,11 +12,15 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool interact;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
-		[Header("Mouse Cursor Settings")]
+		[Header("Debug Settings")]
+		public bool TestForInput = false;
+
+        [Header("Mouse Cursor Settings")]
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
@@ -43,30 +47,43 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnInteract(InputValue value)
+		{
+            if (TestForInput) Debug.Log($"{value} is {value.isPressed}");
+            InteractInput(value.isPressed);
+			interact = false;
+		}
+
 #endif
 
-
-		public void MoveInput(Vector2 newMoveDirection)
+        #region Movement 
+        public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
-
 		public void LookInput(Vector2 newLookDirection)
 		{
 			look = newLookDirection;
 		}
-
 		public void JumpInput(bool newJumpState)
 		{
 			jump = newJumpState;
 		}
-
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
 		}
-		
-		private void OnApplicationFocus(bool hasFocus)
+        #endregion
+
+        #region Intearction
+        public void InteractInput(bool newInteractState)
+		{
+			interact = newInteractState;
+		}
+        #endregion
+
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}

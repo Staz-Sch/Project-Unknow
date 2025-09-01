@@ -524,10 +524,10 @@ MonoBehaviour:
   m_Name: FMODStudioSettings
   m_EditorClassIdentifier: 
   switchSettingsMigration: 1
-  HasSourceProject: 0
+  HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: 
-  sourceBankPath: Assets/_Project/Settings/Audio
+  sourceProjectPath: ../Project Unknow - Fmod/Project-Unknow-Fmod/Project-Unknow-Fmod.fspro
+  sourceBankPath: ../Project Unknow - Fmod/Project-Unknow-Fmod/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
