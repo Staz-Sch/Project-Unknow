@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Boot_Main.unity
     guid: ca55a1944298b3845af4adfe45c8ec79
   - enabled: 1
-    path: Assets/_Project/Scenes/UI_Overlay.unity
-    guid: e4fa70ce00a2cc444b6fd34ece3aa59f
+    path: Assets/_Project/Scenes/MainMenu.unity
+    guid: 0cfd50401ba6454458778e7cb0ad4418
   - enabled: 1
     path: Assets/_Project/Scenes/Levels/Playground.unity
     guid: 707acc8dffb72b144bb1ffbe1c965f3d

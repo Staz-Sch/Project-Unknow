@@ -15,10 +15,47 @@ MonoBehaviour:
   sceneDatas_byGuid:
     keys:
     - 707acc8dffb72b144bb1ffbe1c965f3d
+    - ca55a1944298b3845af4adfe45c8ec79
+    - e4fa70ce00a2cc444b6fd34ece3aa59f
+    - 0cfd50401ba6454458778e7cb0ad4418
     values:
     - goDatas_byGlobalId:
-        keys: []
-        values: []
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-707acc8dffb72b144bb1ffbe1c965f3d-2093087386441524367-326409549
+        values:
+        - colorIndex: 1
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-ca55a1944298b3845af4adfe45c8ec79-869176298-0
+        - globalObjectIdString: GlobalObjectId_V1-2-ca55a1944298b3845af4adfe45c8ec79-1826829935-0
+        values:
+        - colorIndex: 2
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+        - colorIndex: 1
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-e4fa70ce00a2cc444b6fd34ece3aa59f-2093087386441524367-1406775182
+        values:
+        - colorIndex: 1
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
+    - goDatas_byGlobalId:
+        keys:
+        - globalObjectIdString: GlobalObjectId_V1-2-0cfd50401ba6454458778e7cb0ad4418-2093087386441524367-577865117
+        values:
+        - colorIndex: 1
+          iconNameOrGuid: 
+          isIconRecursive: 0
+          isColorRecursive: 0
   bookmarks: []
   bookmarkedScenePaths:
   - Assets/_Project/Scenes/Boot_Main.unity
