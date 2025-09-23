@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -15,11 +14,8 @@ public class SceneLoader : MonoBehaviour
 
     private SceneReference _currentScene;
 
-    [SerializeField]private GameManager _gameManager;
-
-     private void OnEnable()
+    private void OnEnable()
     {
-        Debug.Log("[SL] OnEnable, IsAlive = " + GameManager.IsAlive);
         GameManager.OnAlive += Init;
         if (GameManager.IsAlive && GameManager.Instance != null)
         {
@@ -34,7 +30,6 @@ public class SceneLoader : MonoBehaviour
 
     private void Awake()
     {
-
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -47,8 +42,7 @@ public class SceneLoader : MonoBehaviour
 
     private void Init(GameManager gameManager)
     {
-        _gameManager = gameManager;
-        Debug.Log($"Scene Loader ran Init with {gameManager.name}");
+        GameManager.Instance.SetState(GameState.Gameplay);
 
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
@@ -60,8 +54,6 @@ public class SceneLoader : MonoBehaviour
 
     public void Load(SceneReference scene)
     {
-        Debug.Log("[SL] Load called, _gameManager = " + GameManager.Instance);
-
         var path = scene.GetScenePath();
         var newState = scene.DefaultState;
 
@@ -124,5 +116,5 @@ public class SceneLoader : MonoBehaviour
 #endif
     }
 
-    #endregion
+    #endregion Public API
 }

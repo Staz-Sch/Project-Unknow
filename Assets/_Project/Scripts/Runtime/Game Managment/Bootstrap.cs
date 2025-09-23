@@ -8,7 +8,4 @@ public class Bootstrap : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
     }
-
-
-
 }

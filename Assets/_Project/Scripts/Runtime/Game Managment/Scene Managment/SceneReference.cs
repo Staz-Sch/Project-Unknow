@@ -14,13 +14,10 @@ public class SceneReference : ScriptableObject
     {
         var path = AssetDatabase.GetAssetPath(sceneAsset);
         scenePath = Path.GetFileNameWithoutExtension(path);
-
     }
-
 
     public string GetScenePath()
     {
         return scenePath;
     }
-
 }

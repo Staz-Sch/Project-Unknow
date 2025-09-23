@@ -1,21 +1,22 @@
 using Sirenix.OdinInspector;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 [RequireComponent(typeof(SceneLoader))]
 public class GameManager : MonoBehaviour
 {
+    [ShowInInspector] public GameState CurrentState { get; private set; }
 
-    [ShowInInspector, ReadOnly] public GameState CurrentState { get; private set; }
     public static event Action<GameState> OnGameStateChanged;
+
     public static event Action<GameManager> OnAlive;
+
     public static bool IsAlive { get; private set; }
 
-
     #region Singleton
+
     public static GameManager Instance { get; private set; }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,12 +33,10 @@ public class GameManager : MonoBehaviour
     {
         IsAlive = true;
         OnAlive?.Invoke(Instance);
+        Debug.Log("[GM] Broadcasting OnAlive with " + Instance.name);
     }
 
-
-    #endregion
-
-
+    #endregion Singleton
 
     #region Helpers
 
@@ -45,13 +44,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentState = newState;
         OnGameStateChanged?.Invoke(newState);
-
     }
 
-
-
-    #endregion
-
-
-
+    #endregion Helpers
 }
