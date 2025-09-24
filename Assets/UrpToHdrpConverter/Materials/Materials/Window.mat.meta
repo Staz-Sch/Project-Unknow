@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: acfefaf6f2c74ed43a9ecf9c08a59043
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 278997
+  packageName: URP to HDRP Converter
+  packageVersion: 1.0
+  assetPath: Assets/UrpToHdrpConverter/Materials/Materials/Window.mat
+  uploadId: 659704

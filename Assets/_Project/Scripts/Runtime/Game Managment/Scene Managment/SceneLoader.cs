@@ -13,6 +13,7 @@ public class SceneLoader : MonoBehaviour
     public static event Action<SceneReference> OnSceneLoaded;
 
     private SceneReference _currentScene;
+    private LoadingScreen_Controller _loadingScreen;
 
     private void OnEnable()
     {
@@ -38,6 +39,9 @@ public class SceneLoader : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Find the loading screen in bootstrap
+        _loadingScreen = FindFirstObjectByType<LoadingScreen_Controller>();
     }
 
     private void Init(GameManager gameManager)
@@ -69,6 +73,27 @@ public class SceneLoader : MonoBehaviour
         {
             Debug.LogWarning($"[SceneController] No Path found in {scene.name}");
         }
+    }
+
+    public void BeginLoad(SceneReference scene)
+    {
+        if (_loadingScreen == null)
+        {
+            Debug.LogError("[SceneLoader] No LoadingScreen_Controller found!");
+            return;
+        }
+        StartCoroutine(BeginLoadRoutine(scene));
+    }
+
+    private IEnumerator BeginLoadRoutine(SceneReference scene)
+    {
+        // Step 1: Fade in (black screen)
+        yield return _loadingScreen.FadeRuntime(1f);
+
+        // Step 2: Load scene async
+        yield return LoadAsync(scene);
+
+        // Step 3: Fade out happens automatically via OnSceneLoaded event
     }
 
     public IEnumerator LoadAsync(SceneReference scene)

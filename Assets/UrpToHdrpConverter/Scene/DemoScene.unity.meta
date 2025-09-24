@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3c78e7ce4dbd2b549832679ba700ce2c
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 278997
+  packageName: URP to HDRP Converter
+  packageVersion: 1.0
+  assetPath: Assets/UrpToHdrpConverter/Scene/DemoScene.unity
+  uploadId: 659704

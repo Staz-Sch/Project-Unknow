@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 64d3e84157886d1488c53482c731c787
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 278997
+  packageName: URP to HDRP Converter
+  packageVersion: 1.0
+  assetPath: Assets/UrpToHdrpConverter/Documentation/URP to HDRP Converter Documentation.pdf
+  uploadId: 659704
