@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using Unity.Mathematics;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,139 +10,115 @@ using Sirenix.OdinInspector;
 
 [ExecuteAlways]
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class MultiSplineRoadBuilder : MonoBehaviour
+public class SplineRoadBuilder : MonoBehaviour
 {
 #if ODIN_INSPECTOR
-    [Title("Spline Road Builder (Seamless)")]
-    [InfoBox("Generates a continuous road mesh for all splines in the container.\n• Auto-welds seams\n• Even UV tiling\n• Live edit in Scene")]
+    [Title("Spline Road Generator")]
 #endif
+
     [Header("Spline Source")]
-    [SerializeField, Required] private SplineContainer container;
+    [SerializeField] private SplineContainer spline;
 
 #if ODIN_INSPECTOR
-    [BoxGroup("Road Settings"), LabelText("Width (m)"), MinValue(0.1f)]
+    [BoxGroup("Settings"), LabelWidth(100)]
+    [MinValue(2), MaxValue(500)]
 #endif
-    [SerializeField] private float width = 3f;
+    [SerializeField] private int resolution = 50;
 
 #if ODIN_INSPECTOR
-    [BoxGroup("Road Settings"), LabelText("Samples per meter"), MinValue(0.1f), MaxValue(10f)]
+    [BoxGroup("Settings"), LabelWidth(100)]
 #endif
-    [SerializeField] private float samplesPerMeter = 2f;
+    [SerializeField] private float width = 2f;
 
 #if ODIN_INSPECTOR
-    [BoxGroup("UVs"), LabelText("Tiling per meter"), MinValue(0.01f)]
+    [BoxGroup("Settings"), LabelText("UV Scale"), MinValue(0.01f)]
 #endif
-    [SerializeField] private float vTilesPerMeter = 0.25f;
+    [SerializeField] private float uvScale = 1f;
 
 #if ODIN_INSPECTOR
-    [BoxGroup("Debug"), LabelText("Show Gizmos")]
+    [BoxGroup("Settings"), LabelText("Show Gizmos")]
 #endif
     [SerializeField] private bool showGizmos = true;
 
     private Mesh mesh;
 
-    // ---------------------------------------------------------------------
+    // Used to detect changes when editing spline points
+    private Vector3[] lastPositions;
+
     private void OnEnable()
     {
         if (!mesh)
         {
-            mesh = new Mesh { name = "SeamlessRoad" };
+            mesh = new Mesh { name = "Spline Road Mesh" };
             GetComponent<MeshFilter>().sharedMesh = mesh;
         }
-        Rebuild();
     }
 
     private void Update()
     {
 #if UNITY_EDITOR
         if (!Application.isPlaying)
-            Rebuild();
+        {
+            if (spline != null)
+                BuildRoad();
+        }
 #endif
     }
 
-    // ---------------------------------------------------------------------
-#if ODIN_INSPECTOR
-    [Button(ButtonSizes.Large), GUIColor(0.3f, 0.8f, 1f)]
-#endif
-    public void Rebuild()
+    private void BuildRoad()
     {
-        if (container == null || container.Splines.Count == 0)
+        if (spline == null)
             return;
 
-        var verts = new List<Vector3>();
-        var uvs = new List<Vector2>();
-        var tris = new List<int>();
+        List<Vector3> verts = new();
+        List<Vector2> uvs = new();
+        List<int> tris = new();
 
-        float4x4 l2w = (float4x4)container.transform.localToWorldMatrix;
+        float halfWidth = width * 0.5f;
+        float step = 1f / resolution;
 
-        float halfW = width * 0.5f;
-        float vAccum = 0f;
-        int splineOffset = 0;
-        Vector3 prevEndLeft = Vector3.zero, prevEndRight = Vector3.zero;
-        bool hasPrevEnd = false;
+        float totalLength = spline.CalculateLength();
+        float uvDistance = 0f;
 
-        foreach (var spline in container.Splines)
+        Vector3 prevPos = (Vector3)spline.EvaluatePosition(0f);
+
+        for (int i = 0; i <= resolution; i++)
         {
-            float length = SplineUtility.CalculateLength(spline, l2w);
-            int sampleCount = Mathf.Max(4, Mathf.CeilToInt(length * samplesPerMeter));
-            float step = 1f / sampleCount;
+            float t = i * step;
 
-            spline.Evaluate(0f, out float3 f3Start, out _, out _);
-            Vector3 prevPos = container.transform.TransformPoint((Vector3)f3Start);
+            Vector3 pos = (Vector3)spline.EvaluatePosition(t);
+            Vector3 forward = ((Vector3)spline.EvaluateTangent(t)).normalized;
+            Vector3 up = ((Vector3)spline.EvaluateUpVector(t)).normalized;
+            Vector3 right = Vector3.Cross(up, forward).normalized;
 
-            for (int i = 0; i <= sampleCount; i++)
+            Vector3 leftEdge = pos - right * halfWidth;
+            Vector3 rightEdge = pos + right * halfWidth;
+
+            verts.Add(leftEdge);
+            verts.Add(rightEdge);
+
+            uvDistance += Vector3.Distance(pos, prevPos);
+            uvs.Add(new Vector2(0, uvDistance * uvScale));
+            uvs.Add(new Vector2(1, uvDistance * uvScale));
+            prevPos = pos;
+
+            if (i > 0)
             {
-                float t = i * step;
-                spline.Evaluate(t, out float3 f3Pos, out float3 f3Tan, out float3 f3Up);
+                int baseIndex = i * 2;
+                tris.Add(baseIndex - 2);
+                tris.Add(baseIndex);
+                tris.Add(baseIndex - 1);
 
-                Vector3 pos = container.transform.TransformPoint((Vector3)f3Pos);
-                Vector3 forward = container.transform.TransformDirection((Vector3)f3Tan).normalized;
-                Vector3 up = container.transform.TransformDirection((Vector3)f3Up).normalized;
-                Vector3 right = Vector3.Cross(up, forward).normalized;
-
-                Vector3 left = pos - right * halfW;
-                Vector3 rightV = pos + right * halfW;
-
-                // --- Weld seam to previous spline
-                if (i == 0 && hasPrevEnd)
-                {
-                    left = prevEndLeft;
-                    rightV = prevEndRight;
-                }
-
-                verts.Add(left);
-                verts.Add(rightV);
-
-                vAccum += Vector3.Distance(pos, prevPos);
-                uvs.Add(new Vector2(0f, vAccum * vTilesPerMeter));
-                uvs.Add(new Vector2(1f, vAccum * vTilesPerMeter));
-
-                if (i > 0)
-                {
-                    int bi = splineOffset + i * 2;
-                    tris.Add(bi - 2);
-                    tris.Add(bi);
-                    tris.Add(bi - 1);
-
-                    tris.Add(bi);
-                    tris.Add(bi + 1);
-                    tris.Add(bi - 1);
-                }
-
-                prevPos = pos;
+                tris.Add(baseIndex);
+                tris.Add(baseIndex + 1);
+                tris.Add(baseIndex - 1);
             }
-
-            // remember last pair for next spline
-            prevEndLeft = verts[^2];
-            prevEndRight = verts[^1];
-            hasPrevEnd = true;
-            splineOffset = verts.Count;
         }
 
         mesh.Clear();
         mesh.SetVertices(verts);
-        mesh.SetUVs(0, uvs);
         mesh.SetTriangles(tris, 0);
+        mesh.SetUVs(0, uvs);
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
@@ -153,27 +128,20 @@ public class MultiSplineRoadBuilder : MonoBehaviour
 #endif
     }
 
-    // ---------------------------------------------------------------------
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (!showGizmos || container == null) return;
+        if (!showGizmos || spline == null)
+            return;
 
         Gizmos.color = Color.cyan;
-
-        float4x4 l2w = (float4x4)container.transform.localToWorldMatrix;
-        foreach (var spline in container.Splines)
+        float step = 1f / resolution;
+        Vector3 prev = (Vector3)spline.EvaluatePosition(0f);
+        for (float t = step; t <= 1f; t += step)
         {
-            spline.Evaluate(0f, out float3 f3Start, out _, out _);
-            Vector3 prev = container.transform.TransformPoint((Vector3)f3Start);
-            const float step = 0.02f;
-            for (float t = step; t <= 1f; t += step)
-            {
-                spline.Evaluate(t, out float3 f3Pos, out _, out _);
-                Vector3 p = container.transform.TransformPoint((Vector3)f3Pos);
-                Gizmos.DrawLine(prev, p);
-                prev = p;
-            }
+            Vector3 pos = (Vector3)spline.EvaluatePosition(t);
+            Gizmos.DrawLine(prev, pos);
+            prev = pos;
         }
     }
 #endif
