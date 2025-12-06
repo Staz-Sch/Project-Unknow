@@ -1,20 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!1045 &1
-EditorBuildSettings:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/_Project/Scenes/Boot_Main.unity
-    guid: ca55a1944298b3845af4adfe45c8ec79
-  - enabled: 1
-    path: Assets/_Project/Scenes/MainMenu.unity
-    guid: 0cfd50401ba6454458778e7cb0ad4418
-  - enabled: 1
-    path: Assets/_Project/Scenes/Levels/Playground.unity
-    guid: 707acc8dffb72b144bb1ffbe1c965f3d
-  m_configObjects:
-    com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
-  m_UseUCBPForAssetBundles: 0
+version https://git-lfs.github.com/spec/v1
+oid sha256:15c4cf1165e1d7387cffd2ae90202b5f28256645d0986242a848e36a8aec0383
+size 727
